@@ -29,6 +29,7 @@
     <canvas id="unity-canvas" tabindex="-1"></canvas>
     <script src="Build/WebGLChappeTelegraph.loader.js"></script>
     <script>
+      // Crear instancia del juego
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/WebGLChappeTelegraph.data",
         frameworkUrl: "Build/WebGLChappeTelegraph.framework.js",
@@ -37,6 +38,25 @@
         companyName: "GamesLithium",
         productName: "ChappeTelegraph",
         productVersion: "1.0",
+      });
+
+      // Intentar fullscreen al primer toque
+      function goFullscreen() {
+        const canvas = document.getElementById("unity-canvas");
+        if (canvas.requestFullscreen) {
+          canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) {
+          canvas.webkitRequestFullscreen();
+        } else if (canvas.msRequestFullscreen) {
+          canvas.msRequestFullscreen();
+        }
+      }
+
+      // Activar fullscreen al tocar el canvas (una sola vez)
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("unity-canvas");
+        canvas.addEventListener("click", goFullscreen, { once: true });
+        canvas.addEventListener("touchstart", goFullscreen, { once: true });
       });
     </script>
   </body>

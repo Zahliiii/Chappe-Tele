@@ -2,9 +2,8 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | ChappeTelegraph</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ChappeTelegraph</title>
     <style>
       html, body {
         margin: 0;
@@ -15,27 +14,14 @@
         background-color: black;
       }
 
-      /* El canvas siempre ocupará 100% ancho y 100% alto */
-      #unity-canvas {
-        width: 100vw !important;
-        height: 100vh !important;
-        background: #231F20;
+      canvas {
         display: block;
         position: fixed;
         top: 0;
         left: 0;
-      }
-
-      /* Si quisieras forzar un mínimo aspecto “horizontal”,
-         podrías mostrar un aviso si el alto es mayor que el ancho */
-      @media screen and (max-aspect-ratio: 16/9) {
-        /* nada: deja el canvas visible aunque sea vertical */
-      }
-
-      /* Ejemplo opcional: un aviso si el usuario pone el teléfono en vertical (no obligatorio) */
-      @media screen and (orientation: portrait) {
-        /* Si quieres que funcione también en vertical, elimina este bloque. */
-        /* En este ejemplo, no hacemos nada y permitimos vertical. */
+        width: 100vw;
+        height: 100vh;
+        background-color: #231F20;
       }
     </style>
   </head>

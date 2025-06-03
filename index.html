@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | ChappeTelegraph</title>
+    <title>ChappeTelegraph</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <style>
       html, body {
@@ -22,15 +22,6 @@
         position: fixed;
         top: 0;
         left: 0;
-      }
-
-      @media screen and (orientation: landscape) {
-        #unity-canvas {
-          display: none !important;
-        }
-        #rotate-notice {
-          display: flex;
-        }
       }
 
       #rotate-notice {
@@ -57,6 +48,26 @@
 
     <script src="Build/WebGLChappeTelegraph.loader.js"></script>
     <script>
+      function updateOrientation() {
+        const isLandscape = window.innerWidth > window.innerHeight;
+        const canvas = document.getElementById('unity-canvas');
+        const notice = document.getElementById('rotate-notice');
+
+        if (isLandscape) {
+          canvas.style.display = 'none';
+          notice.style.display = 'flex';
+        } else {
+          canvas.style.display = 'block';
+          notice.style.display = 'none';
+        }
+      }
+
+      // Escuchar cambios de orientación
+      window.addEventListener('orientationchange', updateOrientation);
+      window.addEventListener('resize', updateOrientation);
+      window.addEventListener('load', updateOrientation);
+
+      // Crear la instancia de Unity
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/WebGLChappeTelegraph.data",
         frameworkUrl: "Build/WebGLChappeTelegraph.framework.js",

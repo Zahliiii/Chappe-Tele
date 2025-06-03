@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <meta name="viewport"
         content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>ChappeTelegraph</title>
@@ -17,7 +17,7 @@
 
     canvas {
       display: block;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
@@ -31,57 +31,49 @@
       right: 1rem;
       width: 48px;
       height: 48px;
-      background: url('fullscreen-icon.png') no-repeat center center;
-      background-size: contain;
       border: none;
-      border-radius: 8px;
+      border-radius: 50%;
+      background: #444 url('fullscreen-icon.svg') center/60% no-repeat;
+      color: white;
       z-index: 9999;
       display: none;
     }
   </style>
 </head>
 <body>
-<canvas id="unity-canvas" tabindex="-1"></canvas>
-<button id="fullscreen-btn"></button>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <button id="fullscreen-btn"></button>
 
-<script src="Build/WebGLChappeTelegraph.loader.js"></script>
-<script>
-  const canvas = document.querySelector("#unity-canvas");
-  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  <script src="Build/WebGLChappeTelegraph.loader.js"></script>
+  <script>
+    const canvas = document.querySelector("#unity-canvas");
+    const fullscreenBtn = document.getElementById("fullscreen-btn");
 
-  // Mostrar el botón tras primer toque
-  window.addEventListener("touchstart", () => {
-    fullscreenBtn.style.display = "block";
-  }, { once: true });
+    // Mostrar el botón solo en dispositivos móviles
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      window.addEventListener("touchstart", () => {
+        fullscreenBtn.style.display = "block";
+      }, { once: true });
 
-  // Función de toggle fullscreen
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      const el = document.documentElement;
-      if (el.requestFullscreen) el.requestFullscreen();
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-      else if (el.msRequestFullscreen) el.msRequestFullscreen();
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      else if (document.msExitFullscreen) document.msExitFullscreen();
+      fullscreenBtn.addEventListener("click", () => {
+        const el = document.documentElement;
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+        } else {
+          el.requestFullscreen?.() || el.webkitRequestFullscreen?.();
+        }
+      });
     }
-  }
 
-  fullscreenBtn.addEventListener("click", toggleFullscreen);
-
-  // Opcional: permitir llamada desde Unity (C#)
-  window.ToggleFullscreen = toggleFullscreen;
-
-  createUnityInstance(canvas, {
-    dataUrl: "Build/WebGLChappeTelegraph.data",
-    frameworkUrl: "Build/WebGLChappeTelegraph.framework.js",
-    codeUrl: "Build/WebGLChappeTelegraph.wasm",
-    streamingAssetsUrl: "StreamingAssets",
-    companyName: "GamesLithium",
-    productName: "ChappeTelegraph",
-    productVersion: "1.0",
-  });
-</script>
+    createUnityInstance(canvas, {
+      dataUrl: "Build/WebGLChappeTelegraph.data",
+      frameworkUrl: "Build/WebGLChappeTelegraph.framework.js",
+      codeUrl: "Build/WebGLChappeTelegraph.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "GamesLithium",
+      productName: "ChappeTelegraph",
+      productVersion: "1.0",
+    });
+  </script>
 </body>
 </html>

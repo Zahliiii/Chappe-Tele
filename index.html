@@ -29,12 +29,12 @@
       position: absolute;
       bottom: 1rem;
       right: 1rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
+      width: 48px;
+      height: 48px;
+      background: url('fullscreen-icon.png') no-repeat center center;
+      background-size: contain;
       border: none;
       border-radius: 8px;
-      background: #444;
-      color: white;
       z-index: 9999;
       display: none;
     }
@@ -42,25 +42,36 @@
 </head>
 <body>
 <canvas id="unity-canvas" tabindex="-1"></canvas>
-<button id="fullscreen-btn">Pantalla completa</button>
+<button id="fullscreen-btn"></button>
 
 <script src="Build/WebGLChappeTelegraph.loader.js"></script>
 <script>
   const canvas = document.querySelector("#unity-canvas");
   const fullscreenBtn = document.getElementById("fullscreen-btn");
 
-  // Mostrar botón tras una interacción táctil (requerido por navegadores móviles)
+  // Mostrar el botón tras primer toque
   window.addEventListener("touchstart", () => {
     fullscreenBtn.style.display = "block";
   }, { once: true });
 
-  fullscreenBtn.addEventListener("click", () => {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen();
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); // Safari
-    else if (el.msRequestFullscreen) el.msRequestFullscreen(); // IE11
-    fullscreenBtn.style.display = "none"; // ocultar luego
-  });
+  // Función de toggle fullscreen
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    }
+  }
+
+  fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+  // Opcional: permitir llamada desde Unity (C#)
+  window.ToggleFullscreen = toggleFullscreen;
 
   createUnityInstance(canvas, {
     dataUrl: "Build/WebGLChappeTelegraph.data",

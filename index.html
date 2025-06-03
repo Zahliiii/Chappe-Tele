@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>ChappeTelegraph</title>
+    <title>Unity Web Player | ChappeTelegraph</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <style>
       html, body {
         margin: 0;
         padding: 0;
+        width: 100%;
         height: 100%;
         overflow: hidden;
         background-color: black;
       }
 
+      /* El canvas siempre ocupará 100% ancho y 100% alto */
       #unity-canvas {
         width: 100vw !important;
         height: 100vh !important;
@@ -24,50 +26,23 @@
         left: 0;
       }
 
-      #rotate-notice {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #000;
-        color: white;
-        font-size: 2em;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        text-align: center;
-        padding: 1em;
+      /* Si quisieras forzar un mínimo aspecto “horizontal”,
+         podrías mostrar un aviso si el alto es mayor que el ancho */
+      @media screen and (max-aspect-ratio: 16/9) {
+        /* nada: deja el canvas visible aunque sea vertical */
+      }
+
+      /* Ejemplo opcional: un aviso si el usuario pone el teléfono en vertical (no obligatorio) */
+      @media screen and (orientation: portrait) {
+        /* Si quieres que funcione también en vertical, elimina este bloque. */
+        /* En este ejemplo, no hacemos nada y permitimos vertical. */
       }
     </style>
   </head>
   <body>
-    <div id="rotate-notice">Por favor gira tu dispositivo a orientación vertical para jugar.</div>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-
     <script src="Build/WebGLChappeTelegraph.loader.js"></script>
     <script>
-      function updateOrientation() {
-        const isLandscape = window.innerWidth > window.innerHeight;
-        const canvas = document.getElementById('unity-canvas');
-        const notice = document.getElementById('rotate-notice');
-
-        if (isLandscape) {
-          canvas.style.display = 'none';
-          notice.style.display = 'flex';
-        } else {
-          canvas.style.display = 'block';
-          notice.style.display = 'none';
-        }
-      }
-
-      // Escuchar cambios de orientación
-      window.addEventListener('orientationchange', updateOrientation);
-      window.addEventListener('resize', updateOrientation);
-      window.addEventListener('load', updateOrientation);
-
-      // Crear la instancia de Unity
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/WebGLChappeTelegraph.data",
         frameworkUrl: "Build/WebGLChappeTelegraph.framework.js",

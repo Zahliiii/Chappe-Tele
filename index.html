@@ -9,20 +9,25 @@
     html, body {
       margin: 0;
       padding: 0;
+      background-color: black;
       width: 100%;
       height: 100%;
       overflow: hidden;
+    }
+
+    #unity-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background-color: black;
     }
 
-    canvas {
+    #unity-canvas {
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #231F20;
+      background: #231F20;
+      width: 100%;
+      height: 100%;
     }
 
     #fullscreen-btn {
@@ -41,15 +46,37 @@
   </style>
 </head>
 <body>
-  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="unity-container">
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+  </div>
   <button id="fullscreen-btn"></button>
 
   <script src="Build/WebGLChappeTelegraph.loader.js"></script>
   <script>
-    const canvas = document.querySelector("#unity-canvas");
+    const canvas = document.getElementById("unity-canvas");
+    const container = document.getElementById("unity-container");
     const fullscreenBtn = document.getElementById("fullscreen-btn");
 
-    // Mostrar el botón solo en dispositivos móviles
+    // Ajuste proporcional con letterbox
+    const targetAspect = 16 / 9;
+
+    function resizeCanvas() {
+      const windowAspect = window.innerWidth / window.innerHeight;
+      if (windowAspect > targetAspect) {
+        // Pantalla más ancha que 16:9
+        container.style.width = `${window.innerHeight * targetAspect}px`;
+        container.style.height = `${window.innerHeight}px`;
+      } else {
+        // Pantalla más alta que 16:9
+        container.style.width = `${window.innerWidth}px`;
+        container.style.height = `${window.innerWidth / targetAspect}px`;
+      }
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Mostrar botón fullscreen en móviles
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       window.addEventListener("touchstart", () => {
         fullscreenBtn.style.display = "block";
@@ -72,7 +99,7 @@
       streamingAssetsUrl: "StreamingAssets",
       companyName: "GamesLithium",
       productName: "ChappeTelegraph",
-      productVersion: "1.0",
+      productVersion: "1.0"
     });
   </script>
 </body>
